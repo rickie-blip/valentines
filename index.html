@@ -137,7 +137,7 @@
     <source src="My love Nodis.mp4" type="video/mp4">
   </video>
   
-  <audio id="bgMusic" autoplay loop>
+  <audio id="bgMusic" preload="auto">
     <source src="Nasty C - My Baby (Visualizer) - NastyCVEVO.mp3" type="audio/mpeg">
   </audio>
 
@@ -158,28 +158,38 @@
   </div>
 
   <script>
-    // Force immediate audio playback
-    window.addEventListener('DOMContentLoaded', () => {
-      const audio = document.getElementById('bgMusic');
-      const video = document.getElementById('bgVideo');
-      
-      if (audio && audio.src) {
-        audio.volume = 0.4;
-        audio.play();
+    let audioStarted = false;
+    
+    function startAudio() {
+      if (!audioStarted) {
+        const audio = document.getElementById('bgMusic');
+        if (audio) {
+          audio.volume = 0.4;
+          audio.loop = true;
+          audio.play();
+          audioStarted = true;
+        }
       }
+    }
+    
+    // Try to start audio on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const video = document.getElementById('bgVideo');
       
       if (video && video.src) {
         video.volume = 0;
         video.play();
       }
+      
+      startAudio();
     });
+    
+    // Start audio on first user interaction
+    document.addEventListener('click', startAudio, { once: true });
+    document.addEventListener('touchstart', startAudio, { once: true });
 
     function sayYes() {
-      const audio = document.getElementById('bgMusic');
-      if (audio && audio.src) {
-        audio.volume = 0.4;
-        audio.play();
-      }
+      startAudio();
       
       document.querySelector('.buttons').style.display = 'none';
       document.querySelector('p').innerHTML = `
