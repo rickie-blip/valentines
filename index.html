@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Be My Valentine ❤️</title>
+  <style>
+    #bgVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+    
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+    }
+
+    .card {
+      background: white;
+      padding: 30px 20px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      max-width: 90%;
+      width: 350px;
+    }
+
+    h1 {
+      color: #ff4d6d;
+      font-size: 1.8em;
+      margin-bottom: 10px;
+    }
+
+    .heart {
+      font-size: 3rem;
+      animation: beat 1s infinite;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 25px 15px;
+        margin: 10px;
+      }
+      
+      h1 {
+        font-size: 1.5em;
+      }
+      
+      .heart {
+        font-size: 2.5rem;
+      }
+      
+      p {
+        font-size: 1em;
+      }
+      
+      button {
+        padding: 10px 20px;
+        font-size: 0.9em;
+      }
+      
+      #yesBtn {
+        margin-right: 10px;
+      }
+    }
+
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    @keyframes explode {
+      0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.5) rotate(180deg);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0.5) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    p {
+      font-size: 1.1em;
+      color: #555;
+      margin: 20px 0;
+    }
+
+    .buttons {
+      position: relative;
+      height: 80px;
+      margin-top: 30px;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 1em;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #yesBtn {
+      background: #ff4d6d;
+      color: white;
+      margin-right: 20px;
+    }
+
+    #yesBtn:hover {
+      background: #e63950;
+    }
+
+    #noBtn {
+      background: #ccc;
+      color: #333;
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Media files commented out for deployment
+  <video id="bgVideo" autoplay muted loop volume="0">
+    <source src="My love Nodis.mp4" type="video/mp4">
+  </video>
+  
+  <audio id="bgMusic" loop>
+    <source src="Nasty C - My Baby (Visualizer) - NastyCVEVO.mp3" type="audio/mpeg">
+  </audio>
+  -->
+
+  <div class="card">
+    <h1>Hey Momma ❤️</h1>
+    <div class="heart">❤️</div>
+    <p>
+      You light up my world in ways I never imagined possible.  
+      Every day with you feels like a beautiful dream.  
+      <br><br>
+      Will you be my Valentine? 💕
+    </p>
+
+    <div class="buttons">
+      <button id="yesBtn" onclick="sayYes()">YES 💖</button>
+      <button id="noBtn" onmouseover="moveNo()">NO 🙈</button>
+    </div>
+  </div>
+
+  <script>
+    // Auto-start music on page load and user interaction
+    window.addEventListener('load', () => {
+      const audio = document.getElementById('bgMusic');
+      const video = document.getElementById('bgVideo');
+      audio.volume = 0.4;
+      video.volume = 0;
+      audio.play().catch(e => console.log('Audio autoplay blocked'));
+    });
+    
+    // Try to play audio on first user interaction
+    document.addEventListener('click', () => {
+      const audio = document.getElementById('bgMusic');
+      audio.volume = 0.4;
+      audio.play().catch(e => console.log('Audio play failed'));
+    }, { once: true });
+
+    function sayYes() {
+      // Ensure audio is playing
+      const audio = document.getElementById('bgMusic');
+      audio.volume = 0.4;
+      audio.play().catch(e => console.log('Audio play failed'));
+      // Hide buttons and show sweet message
+      document.querySelector('.buttons').style.display = 'none';
+      document.querySelector('p').innerHTML = `
+        <span style="font-size: 1.3em; color: #ff4d6d; font-weight: bold;">
+          YAY!!! 💕❤️<br>
+          You just made me the happiest person alive!<br>
+          I love you so much! 🥰
+        </span>
+      `;
+      
+      // Create fireworks
+      createFireworks();
+    }
+
+    function createFireworks() {
+      const fireworkEmojis = ['🎆', '✨', '💥', '🌟'];
+      
+      for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+          const firework = document.createElement('div');
+          firework.innerHTML = fireworkEmojis[Math.floor(Math.random() * fireworkEmojis.length)];
+          firework.style.position = 'fixed';
+          firework.style.left = Math.random() * 80 + 10 + 'vw';
+          firework.style.top = Math.random() * 60 + 20 + 'vh';
+          firework.style.fontSize = Math.random() * 30 + 25 + 'px';
+          firework.style.zIndex = '1000';
+          firework.style.pointerEvents = 'none';
+          firework.style.animation = 'explode 1.5s ease-out forwards';
+          document.body.appendChild(firework);
+          
+          setTimeout(() => firework.remove(), 1500);
+        }, i * 200);
+      }
+    }
+
+    function moveNo() {
+      const noBtn = document.getElementById("noBtn");
+      const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+      const maxY = 100;
+      const x = Math.random() * Math.min(maxX, 200);
+      const y = Math.random() * maxY;
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+  </script>
+
+</body>
+</html>
