@@ -158,44 +158,39 @@
   </div>
 
   <script>
-    // Bulletproof script that handles missing media files
-    window.addEventListener('load', () => {
+    // Force immediate audio playback
+    window.addEventListener('DOMContentLoaded', () => {
       const audio = document.getElementById('bgMusic');
       const video = document.getElementById('bgVideo');
       
-      // Only try to play if elements exist and have sources
       if (audio && audio.src) {
         audio.volume = 0.4;
-        audio.play().catch(() => {});
+        audio.play();
       }
       
       if (video && video.src) {
         video.volume = 0;
-        video.play().catch(() => {});
+        video.play();
       }
     });
 
     function sayYes() {
-      try {
-        const audio = document.getElementById('bgMusic');
-        if (audio && audio.src) {
-          audio.volume = 0.4;
-          audio.play().catch(() => {});
-        }
-        
-        document.querySelector('.buttons').style.display = 'none';
-        document.querySelector('p').innerHTML = `
-          <span style="font-size: 1.3em; color: #ff4d6d; font-weight: bold;">
-            YAY!!! 💕❤️<br>
-            You just made me the happiest person alive!<br>
-            I love you so much! 🥰
-          </span>
-        `;
-        
-        createFireworks();
-      } catch (e) {
-        console.log('Error in sayYes:', e);
+      const audio = document.getElementById('bgMusic');
+      if (audio && audio.src) {
+        audio.volume = 0.4;
+        audio.play();
       }
+      
+      document.querySelector('.buttons').style.display = 'none';
+      document.querySelector('p').innerHTML = `
+        <span style="font-size: 1.3em; color: #ff4d6d; font-weight: bold;">
+          YAY!!! 💕❤️<br>
+          You just made me the happiest person alive!<br>
+          I love you so much! 🥰
+        </span>
+      `;
+      
+      createFireworks();
     }
 
     function createFireworks() {
