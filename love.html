@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Be My Valentine ❤️</title>
   <style>
     body {
@@ -16,21 +17,51 @@
 
     .card {
       background: white;
-      padding: 40px;
+      padding: 30px 20px;
       border-radius: 20px;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      max-width: 400px;
+      max-width: 90%;
+      width: 350px;
     }
 
     h1 {
       color: #ff4d6d;
-      font-size: 2em;
+      font-size: 1.8em;
+      margin-bottom: 10px;
     }
 
     .heart {
-      font-size: 4rem;
+      font-size: 3rem;
       animation: beat 1s infinite;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 25px 15px;
+        margin: 10px;
+      }
+      
+      h1 {
+        font-size: 1.5em;
+      }
+      
+      .heart {
+        font-size: 2.5rem;
+      }
+      
+      p {
+        font-size: 1em;
+      }
+      
+      button {
+        padding: 10px 20px;
+        font-size: 0.9em;
+      }
+      
+      #yesBtn {
+        margin-right: 10px;
+      }
     }
 
     @keyframes beat {
@@ -93,6 +124,10 @@
 </head>
 <body>
 
+  <audio id="bgMusic" loop>
+    <source src="Nasty C - My Baby (Visualizer) - NastyCVEVO.mp3" type="audio/mpeg">
+  </audio>
+
   <div class="card">
     <h1>Hey Momma ❤️</h1>
     <div class="heart">❤️</div>
@@ -110,7 +145,23 @@
   </div>
 
   <script>
+    // Start background music on first user interaction
+    let musicStarted = false;
+    
+    function startMusic() {
+      if (!musicStarted) {
+        const audio = document.getElementById('bgMusic');
+        audio.volume = 0.3;
+        audio.play().catch(e => console.log('Audio autoplay blocked'));
+        musicStarted = true;
+      }
+    }
+    
+    document.addEventListener('click', startMusic);
+    document.addEventListener('touchstart', startMusic);
+
     function sayYes() {
+      startMusic();
       // Hide buttons and show sweet message
       document.querySelector('.buttons').style.display = 'none';
       document.querySelector('p').innerHTML = `
@@ -148,8 +199,10 @@
 
     function moveNo() {
       const noBtn = document.getElementById("noBtn");
-      const x = Math.random() * 250;
-      const y = Math.random() * 50;
+      const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+      const maxY = 100;
+      const x = Math.random() * Math.min(maxX, 200);
+      const y = Math.random() * maxY;
       noBtn.style.left = x + "px";
       noBtn.style.top = y + "px";
     }
