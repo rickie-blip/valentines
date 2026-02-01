@@ -78,6 +78,26 @@
       50% { transform: scale(1.2); }
     }
 
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .floating-heart {
+      position: fixed;
+      font-size: 2rem;
+      color: #ff4d6d;
+      pointer-events: none;
+      z-index: 500;
+      animation: floatUp 4s linear forwards;
+    }
+
     @keyframes explode {
       0% {
         transform: scale(0) rotate(0deg);
@@ -129,9 +149,47 @@
       color: #333;
       position: absolute;
     }
+
+    .love-letter {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .letter-content {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow-y: auto;
+      text-align: left;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+
+    .close-letter {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Love Letter Button -->
+  <button id="letterBtn" style="position: fixed; top: 10px; left: 10px; z-index: 1000; background: #ff4d6d; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer;">💌 Love Letter</button>
 
   <video id="bgVideo" autoplay muted loop volume="0">
     <source src="My love Nodis.mp4" type="video/mp4">
@@ -143,6 +201,31 @@
   
   <!-- Audio play button -->
   <button id="playBtn" style="position: fixed; top: 10px; right: 10px; z-index: 1000; background: #ff4d6d; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer;">🎵 Play Music</button>
+
+  <!-- Love Letter Modal -->
+  <div class="love-letter" id="loveLetter">
+    <div class="letter-content">
+      <button class="close-letter" onclick="closeLetter()">×</button>
+      <h2 style="color: #ff4d6d; text-align: center; margin-bottom: 20px;">My Dearest Love 💕</h2>
+      <p style="line-height: 1.6; color: #333;">
+        From the moment I met you, my world changed completely. You brought colors I never knew existed, sounds more beautiful than any symphony, and a warmth that reaches the deepest parts of my soul.
+        <br><br>
+        Every morning I wake up grateful that you're in my life. Your smile is my sunrise, your laugh is my favorite melody, and your love is my greatest treasure.
+        <br><br>
+        You make ordinary moments feel magical. Whether we're sharing quiet conversations, silly jokes, or comfortable silences, every second with you is a gift I cherish.
+        <br><br>
+        I love how you see the world with such kindness and wonder. I love your strength, your gentleness, your beautiful mind, and your incredible heart.
+        <br><br>
+        You are my best friend, my greatest love, and my forever person. I can't wait to create a lifetime of beautiful memories with you.
+        <br><br>
+        Happy Valentine's Day, my love. You mean everything to me. ❤️
+      </p>
+      <p style="text-align: right; font-style: italic; color: #ff4d6d; margin-top: 30px;">
+        Forever yours,<br>
+        Your devoted admirer 💖
+      </p>
+    </div>
+  </div>
 
   <div class="card">
     <h1>Hey Momma ❤️</h1>
@@ -161,6 +244,29 @@
   </div>
 
   <script>
+    // Floating hearts
+    function createFloatingHeart() {
+      const heart = document.createElement('div');
+      heart.innerHTML = '❤️';
+      heart.className = 'floating-heart';
+      heart.style.left = Math.random() * 100 + 'vw';
+      document.body.appendChild(heart);
+      
+      setTimeout(() => heart.remove(), 4000);
+    }
+    
+    // Start floating hearts
+    setInterval(createFloatingHeart, 2000);
+    
+    // Love letter functions
+    function openLetter() {
+      document.getElementById('loveLetter').style.display = 'flex';
+    }
+    
+    function closeLetter() {
+      document.getElementById('loveLetter').style.display = 'none';
+    }
+    
     // Audio control
     let audioPlaying = false;
     
@@ -195,6 +301,9 @@
       }
       
       playBtn.addEventListener('click', toggleAudio);
+      
+      // Letter button
+      document.getElementById('letterBtn').addEventListener('click', openLetter);
     });
 
     function sayYes() {
