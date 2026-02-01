@@ -140,6 +140,9 @@
   <audio id="bgMusic" preload="auto">
     <source src="Nasty C - My Baby (Visualizer) - NastyCVEVO.mp3" type="audio/mpeg">
   </audio>
+  
+  <!-- Audio play button -->
+  <button id="playBtn" style="position: fixed; top: 10px; right: 10px; z-index: 1000; background: #ff4d6d; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer;">🎵 Play Music</button>
 
   <div class="card">
     <h1>Hey Momma ❤️</h1>
@@ -158,38 +161,47 @@
   </div>
 
   <script>
-    let audioStarted = false;
+    // Audio control
+    let audioPlaying = false;
     
-    function startAudio() {
-      if (!audioStarted) {
-        const audio = document.getElementById('bgMusic');
-        if (audio) {
-          audio.volume = 0.4;
-          audio.loop = true;
-          audio.play();
-          audioStarted = true;
-        }
+    function toggleAudio() {
+      const audio = document.getElementById('bgMusic');
+      const playBtn = document.getElementById('playBtn');
+      
+      if (!audioPlaying) {
+        audio.volume = 0.4;
+        audio.loop = true;
+        audio.play().then(() => {
+          audioPlaying = true;
+          playBtn.textContent = '🔇 Stop Music';
+          playBtn.style.display = 'none'; // Hide after starting
+        }).catch(error => {
+          alert('Audio file not found or failed to load');
+        });
+      } else {
+        audio.pause();
+        audioPlaying = false;
+        playBtn.textContent = '🎵 Play Music';
       }
     }
     
-    // Try to start audio on page load
     window.addEventListener('DOMContentLoaded', () => {
       const video = document.getElementById('bgVideo');
+      const playBtn = document.getElementById('playBtn');
       
       if (video && video.src) {
         video.volume = 0;
         video.play();
       }
       
-      startAudio();
+      playBtn.addEventListener('click', toggleAudio);
     });
-    
-    // Start audio on first user interaction
-    document.addEventListener('click', startAudio, { once: true });
-    document.addEventListener('touchstart', startAudio, { once: true });
 
     function sayYes() {
-      startAudio();
+      // Try to start audio if not already playing
+      if (!audioPlaying) {
+        toggleAudio();
+      }
       
       document.querySelector('.buttons').style.display = 'none';
       document.querySelector('p').innerHTML = `
