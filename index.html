@@ -11,7 +11,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       z-index: -1;
     }
     
@@ -133,15 +133,13 @@
 </head>
 <body>
 
-  <!-- Media files commented out for deployment
   <video id="bgVideo" autoplay muted loop volume="0">
     <source src="My love Nodis.mp4" type="video/mp4">
   </video>
   
-  <audio id="bgMusic" loop>
+  <audio id="bgMusic" autoplay loop>
     <source src="Nasty C - My Baby (Visualizer) - NastyCVEVO.mp3" type="audio/mpeg">
   </audio>
-  -->
 
   <div class="card">
     <h1>Hey Momma ❤️</h1>
@@ -160,70 +158,83 @@
   </div>
 
   <script>
-    // Auto-start music on page load and user interaction
+    // Bulletproof script that handles missing media files
     window.addEventListener('load', () => {
       const audio = document.getElementById('bgMusic');
       const video = document.getElementById('bgVideo');
-      audio.volume = 0.4;
-      video.volume = 0;
-      audio.play().catch(e => console.log('Audio autoplay blocked'));
+      
+      // Only try to play if elements exist and have sources
+      if (audio && audio.src) {
+        audio.volume = 0.4;
+        audio.play().catch(() => {});
+      }
+      
+      if (video && video.src) {
+        video.volume = 0;
+        video.play().catch(() => {});
+      }
     });
-    
-    // Try to play audio on first user interaction
-    document.addEventListener('click', () => {
-      const audio = document.getElementById('bgMusic');
-      audio.volume = 0.4;
-      audio.play().catch(e => console.log('Audio play failed'));
-    }, { once: true });
 
     function sayYes() {
-      // Ensure audio is playing
-      const audio = document.getElementById('bgMusic');
-      audio.volume = 0.4;
-      audio.play().catch(e => console.log('Audio play failed'));
-      // Hide buttons and show sweet message
-      document.querySelector('.buttons').style.display = 'none';
-      document.querySelector('p').innerHTML = `
-        <span style="font-size: 1.3em; color: #ff4d6d; font-weight: bold;">
-          YAY!!! 💕❤️<br>
-          You just made me the happiest person alive!<br>
-          I love you so much! 🥰
-        </span>
-      `;
-      
-      // Create fireworks
-      createFireworks();
+      try {
+        const audio = document.getElementById('bgMusic');
+        if (audio && audio.src) {
+          audio.volume = 0.4;
+          audio.play().catch(() => {});
+        }
+        
+        document.querySelector('.buttons').style.display = 'none';
+        document.querySelector('p').innerHTML = `
+          <span style="font-size: 1.3em; color: #ff4d6d; font-weight: bold;">
+            YAY!!! 💕❤️<br>
+            You just made me the happiest person alive!<br>
+            I love you so much! 🥰
+          </span>
+        `;
+        
+        createFireworks();
+      } catch (e) {
+        console.log('Error in sayYes:', e);
+      }
     }
 
     function createFireworks() {
-      const fireworkEmojis = ['🎆', '✨', '💥', '🌟'];
-      
-      for (let i = 0; i < 15; i++) {
-        setTimeout(() => {
-          const firework = document.createElement('div');
-          firework.innerHTML = fireworkEmojis[Math.floor(Math.random() * fireworkEmojis.length)];
-          firework.style.position = 'fixed';
-          firework.style.left = Math.random() * 80 + 10 + 'vw';
-          firework.style.top = Math.random() * 60 + 20 + 'vh';
-          firework.style.fontSize = Math.random() * 30 + 25 + 'px';
-          firework.style.zIndex = '1000';
-          firework.style.pointerEvents = 'none';
-          firework.style.animation = 'explode 1.5s ease-out forwards';
-          document.body.appendChild(firework);
-          
-          setTimeout(() => firework.remove(), 1500);
-        }, i * 200);
+      try {
+        const fireworkEmojis = ['🎆', '✨', '💥', '🌟'];
+        
+        for (let i = 0; i < 15; i++) {
+          setTimeout(() => {
+            const firework = document.createElement('div');
+            firework.innerHTML = fireworkEmojis[Math.floor(Math.random() * fireworkEmojis.length)];
+            firework.style.position = 'fixed';
+            firework.style.left = Math.random() * 80 + 10 + 'vw';
+            firework.style.top = Math.random() * 60 + 20 + 'vh';
+            firework.style.fontSize = Math.random() * 30 + 25 + 'px';
+            firework.style.zIndex = '1000';
+            firework.style.pointerEvents = 'none';
+            firework.style.animation = 'explode 1.5s ease-out forwards';
+            document.body.appendChild(firework);
+            
+            setTimeout(() => firework.remove(), 1500);
+          }, i * 200);
+        }
+      } catch (e) {
+        console.log('Error in createFireworks:', e);
       }
     }
 
     function moveNo() {
-      const noBtn = document.getElementById("noBtn");
-      const maxX = window.innerWidth - noBtn.offsetWidth - 20;
-      const maxY = 100;
-      const x = Math.random() * Math.min(maxX, 200);
-      const y = Math.random() * maxY;
-      noBtn.style.left = x + "px";
-      noBtn.style.top = y + "px";
+      try {
+        const noBtn = document.getElementById("noBtn");
+        const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+        const maxY = 100;
+        const x = Math.random() * Math.min(maxX, 200);
+        const y = Math.random() * maxY;
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+      } catch (e) {
+        console.log('Error in moveNo:', e);
+      }
     }
   </script>
 
